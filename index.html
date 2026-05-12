@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Launch Calculator — AI Email Marketing Treasure Chest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f4f2;
+      font-family: 'Inter', sans-serif;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    input[type=number] { -moz-appearance: textfield; }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    /* HERO */
+    .lc-hero {
+      background: #1a1a1a;
+      padding: 32px 32px 28px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .lc-hero-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .lc-eyebrow {
+      display: inline-block;
+      background: #e040fb;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+    }
+    .lc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+    .lc-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 17px;
+      color: #fff;
+      line-height: 1.5;
+      max-width: 480px;
+    }
+
+    .lc-divider { height: 4px; background: #e040fb; }
+
+    /* BODY */
+    .lc-body {
+      padding: 36px 24px 0;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .lc-section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #e040fb;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lc-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #d4d0cc;
+    }
+
+    /* CARD */
+    .lc-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(212,208,204,0.5);
+    }
+
+    .lc-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f4f2;
+    }
+    .lc-row:last-of-type { border-bottom: none; }
+
+    .lc-row-label {
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #1a1a1a;
+      flex: 1;
+      padding-right: 16px;
+      line-height: 1.4;
+    }
+    .lc-row-label small {
+      display: block;
+      font-size: 11px;
+      color: #666;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    .lc-input-wrap { position: relative; flex-shrink: 0; }
+    .lc-prefix {
+      position: absolute;
+      left: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px; font-weight: 500;
+      color: #666; pointer-events: none;
+    }
+    .lc-suffix {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px; font-weight: 500;
+      color: #666; pointer-events: none;
+    }
+    .lc-input {
+      width: 120px; height: 40px;
+      border: 1.5px solid #d4d0cc;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: #1a1a1a; background: #f5f4f2;
+      text-align: right;
+      padding: 0 12px;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .lc-input:focus { border-color: #e040fb; background: #fff; }
+    .lc-input.has-prefix { padding-left: 24px; text-align: left; }
+    .lc-input.has-suffix { padding-right: 28px; }
+
+    /* RESULT ROW */
+    .lc-result-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #1a1a1a; border-radius: 10px;
+      padding: 14px 18px; margin-top: 14px;
+    }
+    .lc-result-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .lc-result-num {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      color: #fff; letter-spacing: 0;
+      text-transform: none; margin-top: 2px;
+    }
+    .lc-result-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700;
+      color: #e040fb; text-align: right;
+    }
+    .lc-result-value small {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; font-weight: 400;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;
+    }
+
+    /* INSIGHT */
+    .lc-insight {
+      background: rgba(224,64,251,0.06);
+      border: 1px solid rgba(224,64,251,0.18);
+      border-radius: 10px; padding: 14px 16px; margin-top: 12px;
+      font-size: 12.5px; color: #666; line-height: 1.65;
+    }
+    .lc-insight strong { color: #1a1a1a; }
+
+    /* SUMMARY */
+    .lc-summary {
+      background: #1a1a1a; border-radius: 14px;
+      padding: 32px 28px 28px; margin-bottom: 16px;
+      position: relative; overflow: hidden;
+    }
+    .lc-summary::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px; background: #e040fb;
+    }
+    .lc-summary-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px; font-weight: 600;
+      color: #e040fb; margin-bottom: 8px;
+    }
+    .lc-summary-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      color: #fff; margin-bottom: 24px; line-height: 1.25;
+    }
+    .lc-summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px;
+    }
+    .lc-stat-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-bottom: 5px;
+    }
+    .lc-stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 700; color: #fff;
+    }
+    .lc-stat-val.pink { color: #e040fb; }
+    .lc-stat-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+    .lc-reframe {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 18px 20px; margin-top: 28px;
+      font-size: 12.5px; line-height: 1.75; color: rgba(255,255,255,0.5);
+    }
+    .lc-reframe strong { color: #fff; }
+    .lc-reframe em { color: #fff; font-style: normal; font-weight: 600; }
+
+    /* STRATEGY */
+    .lc-strategy-card {
+      background: #fff; border-radius: 14px; padding: 24px;
+      margin-bottom: 16px; border: 1px solid rgba(212,208,204,0.5);
+    }
+    .lc-strategy-intro { font-size: 13.5px; line-height: 1.7; color: #1a1a1a; margin-bottom: 10px; }
+    .lc-strategy-body { font-size: 13px; line-height: 1.7; color: #666; margin-bottom: 16px; }
+    .lc-strategy-subhead { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
+    .lc-pill-list { display: flex; flex-direction: column; gap: 8px; }
+    .lc-pill {
+      display: flex; gap: 10px; padding: 11px 14px;
+      background: #f5f4f2; border-radius: 9px;
+      font-size: 12.5px; align-items: flex-start;
+    }
+    .lc-pill-arrow { color: #e040fb; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .lc-pill-text { color: #666; line-height: 1.55; }
+    .lc-pill-text strong { color: #1a1a1a; }
+
+    /* GROW */
+    .lc-grow-card {
+      background: #fff; border-radius: 14px; padding: 24px;
+      margin-bottom: 16px; border: 1px solid rgba(212,208,204,0.5);
+    }
+    .lc-grow-intro { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+    .lc-grow-sub { font-size: 13px; color: #666; line-height: 1.65; margin-bottom: 18px; }
+    .lc-grow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .lc-grow-tile { background: #f5f4f2; border-radius: 10px; padding: 14px 14px 12px; }
+    .lc-grow-emoji { font-size: 20px; margin-bottom: 8px; }
+    .lc-grow-tile-title { font-size: 12.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 5px; }
+    .lc-grow-tile-desc { font-size: 11.5px; color: #666; line-height: 1.55; }
+    .lc-grow-tile-tag {
+      display: inline-block; margin-top: 8px;
+      font-size: 9.5px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase; color: #e040fb;
+    }
+
+    /* JOIN CTA */
+    .lc-join {
+      background: #1a1a1a; border-radius: 14px; padding: 40px 28px;
+      margin-bottom: 16px; text-align: center;
+      position: relative; overflow: hidden;
+      border: 1px solid rgba(224,64,251,0.2);
+    }
+    .lc-join::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #e040fb, #c020e0);
+    }
+    .lc-join-kicker {
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .lc-join-kicker::before,
+    .lc-join-kicker::after { content: ''; flex: 0 0 32px; height: 1px; background: rgba(255,255,255,0.1); }
+    .lc-join-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 22px; font-weight: 600;
+      color: #e040fb; margin-bottom: 12px;
+    }
+    .lc-join-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; font-weight: 700;
+      color: #fff; margin-bottom: 16px; line-height: 1.15;
+    }
+    .lc-join-body {
+      font-size: 14px; color: rgba(255,255,255,0.65);
+      line-height: 1.75; max-width: 400px; margin: 0 auto 28px;
+    }
+    .lc-join-body strong { color: #fff; }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 24px rgba(224,64,251,0.4), 0 0 48px rgba(224,64,251,0.15); }
+      50% { box-shadow: 0 0 36px rgba(224,64,251,0.7), 0 0 72px rgba(224,64,251,0.25); }
+    }
+    .lc-join-btn {
+      display: inline-block; background: #e040fb; color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 16px 36px; border-radius: 50px; border: none;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s;
+      animation: glowPulse 2.4s ease-in-out infinite;
+    }
+    .lc-join-btn:hover { background: #cc30d6; }
+    .lc-join-fine {
+      font-size: 11px; color: rgba(255,255,255,0.25);
+      margin-top: 14px; letter-spacing: 0.04em;
+    }
+
+    /* FOOTER */
+    .lc-footer {
+      background: #1a1a1a; padding: 28px 24px;
+      text-align: center; margin-top: 32px;
+    }
+    .lc-footer::before {
+      content: ''; display: block;
+      height: 2px; background: #e040fb; margin-bottom: 24px;
+    }
+    .lc-footer-brand {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: #fff; margin-bottom: 10px;
+    }
+    .lc-footer-links {
+      display: flex; justify-content: center; gap: 16px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .lc-footer-link { font-size: 11px; color: rgba(255,255,255,0.45); text-decoration: none; }
+    .lc-footer-link:hover { color: #e040fb; }
+    .lc-footer-legal {
+      font-size: 10px; color: rgba(255,255,255,0.2);
+      line-height: 1.6; max-width: 500px; margin: 0 auto;
+    }
+
+    .mt-32 { margin-top: 32px; }
+  </style>
+</head>
+<body>
+
+  <div class="lc-hero">
+    <div class="lc-hero-inner">
+      <div class="lc-eyebrow">AI Email Marketing Treasure Chest</div>
+      <h1 class="lc-title">Launch Calculator</h1>
+      <p class="lc-subtitle">Enter your goal and let the numbers show you exactly what your email list needs to deliver it. No guessing.</p>
+    </div>
+  </div>
+  <div class="lc-divider"></div>
+
+  <div class="lc-body">
+
+    <!-- SECTION 1 -->
+    <div class="lc-section-label mt-32">✦ Section 1 — Your Sales Goal</div>
+    <div class="lc-card">
+      <div class="lc-row">
+        <div class="lc-row-label">
+          Revenue Goal
+          <small>How much do you want to make from this launch?</small>
+        </div>
+        <div class="lc-input-wrap">
+          <span class="lc-prefix">$</span>
+          <input class="lc-input has-prefix" type="number" id="salesGoal" value="5000" oninput="calc()" />
+        </div>
+      </div>
+      <div class="lc-row">
+        <div class="lc-row-label">
+          Product Price Point
+          <small>What are you selling, and at what price?</small>
+        </div>
+        <div class="lc-input-wrap">
+          <span class="lc-prefix">$</span>
+          <input class="lc-input has-prefix" type="number" id="pricePoint" value="400" oninput="calc()" />
+        </div>
+      </div>
+      <div class="lc-row" style="border-bottom:none">
+        <div class="lc-row-label">
+          Sales Page Conversion Rate
+          <small>Unsure? Use 2.5% as a starting point.</small>
+        </div>
+        <div class="lc-input-wrap">
+          <span class="lc-suffix">%</span>
+          <input class="lc-input has-suffix" type="number" id="convRate" value="2.5" step="0.1" oninput="calc()" />
+        </div>
+      </div>
+
+      <div class="lc-result-row">
+        <div class="lc-result-label">
+          Sales needed
+          <span class="lc-result-num" id="salesNeeded">13</span>
+        </div>
+        <div class="lc-result-value">
+          <span id="salesPageViews">500</span>
+          <small>sales page views needed</small>
+        </div>
+      </div>
+
+      <div class="lc-insight" id="insight1">
+        To hit <strong>$5,000</strong>, you need <strong>13 sales</strong> at <strong>$400</strong>. With a 2.5% conversion rate, that means getting <strong>500 people</strong> to your sales page. Your email list is the most reliable way to send warm, ready-to-buy traffic directly there.
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="lc-section-label">◈ Section 2 — Your Email List</div>
+    <div class="lc-card">
+      <div class="lc-row">
+        <div class="lc-row-label">
+          Current Email Open Rate
+          <small>Check your email platform. Industry avg is around 35–45%.</small>
+        </div>
+        <div class="lc-input-wrap">
+          <span class="lc-suffix">%</span>
+          <input class="lc-input has-suffix" type="number" id="openRate" value="45" step="0.1" oninput="calc()" />
+        </div>
+      </div>
+      <div class="lc-row" style="border-bottom:none">
+        <div class="lc-row-label">
+          Current Click Rate
+          <small>The % of people who click links in your emails.</small>
+        </div>
+        <div class="lc-input-wrap">
+          <span class="lc-suffix">%</span>
+          <input class="lc-input has-suffix" type="number" id="clickRate" value="3" step="0.1" oninput="calc()" />
+        </div>
+      </div>
+
+      <div class="lc-result-row">
+        <div class="lc-result-label">
+          Opens needed
+          <span class="lc-result-num" id="reqOpens">16,667</span>
+        </div>
+        <div class="lc-result-value">
+          <span id="idealListSize">37,037</span>
+          <small>ideal list size</small>
+        </div>
+      </div>
+
+      <div class="lc-insight" id="insight2">
+        To get <strong>500 clicks</strong> to your sales page, you need <strong>16,667 people</strong> to open your emails. Based on your <strong>45% open rate</strong> and <strong>3% click rate</strong>, you would ideally have a list of around <strong>37,037 subscribers</strong>. Not there yet? That is what the rest of this tool is for.
+      </div>
+    </div>
+
+    <!-- SNAPSHOT -->
+    <div class="lc-section-label">◉ Your Launch Snapshot</div>
+    <div class="lc-summary">
+      <div class="lc-summary-eyebrow">Here's your number</div>
+      <div class="lc-summary-title" id="snapTitle">What it takes to hit $5,000</div>
+      <div class="lc-summary-grid">
+        <div>
+          <div class="lc-stat-label">Sales needed</div>
+          <div class="lc-stat-val" id="snap1">13</div>
+          <div class="lc-stat-sub" id="snap1s">at $400 each</div>
+        </div>
+        <div>
+          <div class="lc-stat-label">Sales page views</div>
+          <div class="lc-stat-val" id="snap2">500</div>
+          <div class="lc-stat-sub" id="snap2s">at 2.5% conversion</div>
+        </div>
+        <div>
+          <div class="lc-stat-label">Email opens needed</div>
+          <div class="lc-stat-val" id="snap3">16,667</div>
+          <div class="lc-stat-sub" id="snap3s">at 3% click rate</div>
+        </div>
+        <div>
+          <div class="lc-stat-label">Ideal list size</div>
+          <div class="lc-stat-val pink" id="snap4">37,037</div>
+          <div class="lc-stat-sub" id="snap4s">at 45% open rate</div>
+        </div>
+      </div>
+      <div class="lc-reframe">
+        <strong>If that number feels big, read this before you spiral.</strong> These numbers exist because so many business owners tweak their offer, drop their price, or blame their messaging when a launch underperforms. Most of the time? <em>Not enough people saw it.</em> Knowing your number means you can focus on the real lever: getting more eyes on your work. It is a target, not a verdict. And there are faster ways to close the gap than you think.
+      </div>
+    </div>
+
+    <!-- WHAT TO DO -->
+    <div class="lc-section-label">✧ What To Do With These Numbers</div>
+    <div class="lc-strategy-card">
+      <p class="lc-strategy-intro"><strong>A bigger list is not the only way to move the needle.</strong></p>
+      <p class="lc-strategy-body">Every time you improve your open rate, click rate, or conversion rate, your required list size drops. A warm, nurtured list of 3,000 will consistently outperform a cold, neglected list of 30,000. Work on your rates before your next launch and the numbers start looking a lot friendlier.</p>
+      <p class="lc-strategy-subhead">Three things to focus on before your next launch:</p>
+      <div class="lc-pill-list">
+        <div class="lc-pill">
+          <span class="lc-pill-arrow">→</span>
+          <span class="lc-pill-text"><strong>Nurture before you sell.</strong> A warm list clicks. A cold list does not. Your pre-launch email sequence matters as much as your launch emails.</span>
+        </div>
+        <div class="lc-pill">
+          <span class="lc-pill-arrow">→</span>
+          <span class="lc-pill-text"><strong>Write better subject lines.</strong> Open rate is the first domino. Everything else follows. Use the Subject Line Generator in this Treasure Chest.</span>
+        </div>
+        <div class="lc-pill">
+          <span class="lc-pill-arrow">→</span>
+          <span class="lc-pill-text"><strong>Sharpen your calls to action.</strong> Is there one obvious thing to click in each email? Higher click rate means you need a smaller list to hit the same goal.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROW -->
+    <div class="lc-section-label">◎ Ways To Grow Your List Faster</div>
+    <div class="lc-grow-card">
+      <div class="lc-grow-intro">If your list is not where it needs to be yet, here are four ways to get in front of new eyes fast.</div>
+      <div class="lc-grow-sub">None of these require a big social media following. All of them work with email.</div>
+      <div class="lc-grow-grid">
+        <div class="lc-grow-tile">
+          <div class="lc-grow-emoji">✉️</div>
+          <div class="lc-grow-tile-title">Freebie Swaps</div>
+          <div class="lc-grow-tile-desc">Partner with someone in a complementary niche and promote each other's lead magnets to your respective lists. Both lists grow, no ad spend required.</div>
+          <div class="lc-grow-tile-tag">Free</div>
+        </div>
+        <div class="lc-grow-tile">
+          <div class="lc-grow-emoji">✉️</div>
+          <div class="lc-grow-tile-title">Partnerships</div>
+          <div class="lc-grow-tile-desc">Co-host a free webinar, challenge, or workshop with a complementary business owner. Cross-promote to both audiences and collect emails at registration.</div>
+          <div class="lc-grow-tile-tag">Free</div>
+        </div>
+        <div class="lc-grow-tile">
+          <div class="lc-grow-emoji">✉️</div>
+          <div class="lc-grow-tile-title">Email Sponsorships</div>
+          <div class="lc-grow-tile-desc">Pay to be featured as a sponsor in another creator's newsletter. You get a warm, targeted introduction to an already-engaged audience.</div>
+          <div class="lc-grow-tile-tag">Paid</div>
+        </div>
+        <div class="lc-grow-tile">
+          <div class="lc-grow-emoji">✉️</div>
+          <div class="lc-grow-tile-title">Meta Ads</div>
+          <div class="lc-grow-tile-desc">Run a lead gen campaign directly to a freebie landing page. Can be very cost-effective when your freebie is specific and your targeting is tight.</div>
+          <div class="lc-grow-tile-tag">Paid</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOIN CTA -->
+    <div class="lc-join">
+      <div class="lc-join-kicker">Ready to grow?</div>
+      <div class="lc-join-eyebrow">More tools. More results. More launches that actually land.</div>
+      <div class="lc-join-title">This is just one tool inside Email Marketing Skool.</div>
+      <p class="lc-join-body">
+        Inside you will find a full treasure chest of AI email marketing tools built for women who want to <strong>sell more, launch with confidence, and grow their income without living on social media.</strong> Subject line generators, launch sequences, list-building strategies, and a community of women sharing what is actually working in their inboxes right now.
+      </p>
+      <a href="https://www.skool.com/email-marketing-skool/plans?sc=1" target="_blank" rel="noopener noreferrer" class="lc-join-btn">
+        Join Email Marketing Skool →
+      </a>
+      <div class="lc-join-fine">From $9/month. Cancel anytime.</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="lc-footer">
+    <div class="lc-footer-brand">Kylie | Kelly</div>
+    <div class="lc-footer-links">
+      <a href="https://kyliekelly.com" target="_blank" rel="noopener noreferrer" class="lc-footer-link">kyliekelly.com</a>
+      <span style="color:rgba(255,255,255,0.2);font-size:11px">·</span>
+      <a href="https://kyliekelly.com/privacy-policy" target="_blank" rel="noopener noreferrer" class="lc-footer-link">Privacy Policy &amp; Terms</a>
+    </div>
+    <div class="lc-footer-legal">
+      &copy; 2026 Kylie Kelly &middot; ABN 76 205 632 387 &middot; All rights reserved.<br>
+      This resource is for members of Email Marketing Skool. Educational use only. By using this tool you agree to Kylie Kelly's Terms &amp; Conditions.
+    </div>
+  </div>
+
+  <script>
+    function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function fmt(n) { if (!isFinite(n) || n <= 0) return '0'; return Math.round(n).toLocaleString(); }
+
+    function calc() {
+      const sg = v('salesGoal'), pp = v('pricePoint'), cr = v('convRate');
+      const or = v('openRate'), clr = v('clickRate');
+
+      const sn  = pp  > 0 ? sg / pp         : 0;
+      const spv = cr  > 0 ? sn / (cr / 100) : 0;
+      const on  = clr > 0 ? spv / (clr / 100) : 0;
+      const ls  = or  > 0 ? on / (or / 100)  : 0;
+
+      document.getElementById('salesNeeded').textContent   = fmt(sn);
+      document.getElementById('salesPageViews').textContent = fmt(spv);
+      document.getElementById('reqOpens').textContent       = fmt(on);
+      document.getElementById('idealListSize').textContent  = fmt(ls);
+
+      document.getElementById('snap1').textContent  = fmt(sn);
+      document.getElementById('snap1s').textContent = 'at $' + pp + ' each';
+      document.getElementById('snap2').textContent  = fmt(spv);
+      document.getElementById('snap2s').textContent = 'at ' + cr + '% conversion';
+      document.getElementById('snap3').textContent  = fmt(on);
+      document.getElementById('snap3s').textContent = 'at ' + clr + '% click rate';
+      document.getElementById('snap4').textContent  = fmt(ls);
+      document.getElementById('snap4s').textContent = 'at ' + or + '% open rate';
+
+      document.getElementById('snapTitle').textContent = 'What it takes to hit $' + Math.round(sg).toLocaleString();
+
+      document.getElementById('insight1').innerHTML =
+        'To hit <strong>$' + Math.round(sg).toLocaleString() + '</strong>, you need <strong>' + fmt(sn) + ' sales</strong> at <strong>$' + pp + '</strong>. With a ' + cr + '% conversion rate, that means getting <strong>' + fmt(spv) + ' people</strong> to your sales page. Your email list is the most reliable way to send warm, ready-to-buy traffic directly there.';
+
+      document.getElementById('insight2').innerHTML =
+        'To get <strong>' + fmt(spv) + ' clicks</strong> to your sales page, you need <strong>' + fmt(on) + ' people</strong> to open your emails. Based on your <strong>' + or + '% open rate</strong> and <strong>' + clr + '% click rate</strong>, you would ideally have a list of around <strong>' + fmt(ls) + ' subscribers</strong>. Not there yet? That is what the rest of this tool is for.';
+    }
+  </script>
+
+</body>
+</html>
